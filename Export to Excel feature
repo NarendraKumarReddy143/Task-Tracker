@@ -1,0 +1,66 @@
+pip install openpyxl
+
+
+views.py
+
+import openpyxl
+from django.http import HttpResponse
+from .models import Task
+
+
+def export_tasks_excel(request):
+    # Create workbook and sheet
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Tasks"
+
+    # Header row
+    ws.append([
+        "Use Case Name",
+        "UCE Name",
+        "Tower",
+        "Task Type",
+        "Time to Complete (Hours)",
+        "Created At"
+    ])
+
+    # Fetch data from DB
+    tasks = Task.objects.all().order_by('-created_at')
+
+    for task in tasks:
+        ws.append([
+            task.use_case_name,
+            task.uce_name,
+            task.tower,
+            task.task_type,
+            float(task.time_to_complete),
+            task.created_at.strftime("%Y-%m-%d %H:%M")
+        ])
+
+    # Prepare HTTP response
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = 'attachment; filename=task_data.xlsx'
+
+    wb.save(response)
+    return response
+
+
+
+
+
+urls.py
+
+
+
+from django.contrib import admin
+from django.urls import path
+from tracker import views as v1
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', v1.task_create, name='task_create'),
+    path('success/', v1.success, name='success'),
+    path('export-excel/', v1.export_tasks_excel, name='export_excel'),  # 👈 NEW
+]
