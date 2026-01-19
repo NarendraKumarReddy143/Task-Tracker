@@ -4,59 +4,74 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Task Tracking</title>
+  <title>UCE Task Tracking</title>
   <style>
-    body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f6f8; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f6f8; }
     .container { width: 480px; margin: 60px auto; background: #fff; padding: 28px 32px; border-radius: 8px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
     h2 { text-align: center; margin-bottom: 24px; color: #333; }
     .form-group { margin-bottom: 16px; }
     label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 6px; color: #555; }
-    input[type="text"], input[type="number"] { width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; box-sizing: border-box; }
-    input[type="text"]:focus, input[type="number"]:focus { outline: none; border-color: #0078d4; }
-    .time-row { display: flex; align-items: center; gap: 8px; }
-    .time-row span { font-size: 14px; color: #555; }
-    button { width: 100%; padding: 12px; background-color: #0078d4; color: #fff; border: none; border-radius: 6px; font-size: 15px; cursor: pointer; margin-top: 12px; }
+    input, select, textarea {
+      width: 100%; padding: 10px 12px;
+      border: 1px solid #ccc; border-radius: 5px;
+      font-size: 14px;
+    }
+    textarea { resize: vertical; min-height: 80px; }
+    button {
+      width: 100%; padding: 12px;
+      background-color: #0078d4; color: #fff;
+      border: none; border-radius: 6px;
+      font-size: 15px; cursor: pointer;
+    }
     button:hover { background-color: #005fa3; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Task Tracking Form</h2>
 
-    <form method="post" action="">
-      {% csrf_token %}
+<div class="container">
+  <h2>UCE Task Tracking</h2>
 
-      <div class="form-group">
-        <label>Use Case Name</label>
-        <input type="text" name="use_case_name" required>
-      </div>
+  <form method="post">
+    {% csrf_token %}
 
-      <div class="form-group">
-        <label>UCE Name</label>
-        <input type="text" name="uce_name" required>
-      </div>
+    <div class="form-group">
+      <label>Use Case Name</label>
+      <input type="text" name="use_case_name" required>
+    </div>
 
-      <div class="form-group">
-        <label>Tower</label>
-        <input type="text" name="tower">
-      </div>
+    <div class="form-group">
+      <label>UCE Name</label>
+      <input type="text" name="uce_name" required>
+    </div>
 
-      <div class="form-group">
-        <label>Task Type</label>
-        <input type="text" name="task_type">
-      </div>
+    <div class="form-group">
+      <label>Tower</label>
+      <input type="text" name="tower">
+    </div>
 
-      <div class="form-group">
-        <label>Time to Complete</label>
-        <div class="time-row">
-          <input type="number" name="time_to_complete" min="0" step="0.5">
-          <span>Hours</span>
-        </div>
-      </div>
+    <div class="form-group">
+      <label>Task Type</label>
+      <select name="task_type" required>
+        <option value="">-- Select --</option>
+        <option value="UNIFY_UCE">Unify + UCE</option>
+        <option value="ADV_UCE">Advance UCE</option>
+        <option value="SERVERLESS">Serverless</option>
+      </select>
+    </div>
 
-      <button type="submit">Submit</button>
-    </form>
-  </div>
+    <div class="form-group">
+      <label>Task Description</label>
+      <textarea name="task_description"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Time to Complete (Minutes)</label>
+      <input type="number" name="time_to_complete" min="1" required>
+    </div>
+
+    <button type="submit">Submit</button>
+  </form>
+</div>
 
 </body>
 </html>
